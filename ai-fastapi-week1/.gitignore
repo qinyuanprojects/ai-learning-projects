@@ -1,0 +1,58 @@
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+*.pyo
+
+# ---- Virtual Environments ----
+.venv/
+venv/
+env/
+ENV/
+
+# ---- IDE & Editor Files ----
+.vscode/
+.idea/
+*.iml
+
+# ---- Jupyter & Notebooks ----
+.ipynb_checkpoints/
+*.ipynb
+
+# ---- Logs & Temp ----
+*.log
+*.tmp
+*.temp
+*.bak
+*.swp
+
+# ---- OS-specific ----
+.DS_Store
+Thumbs.db
+
+# ---- Build Artifacts ----
+build/
+dist/
+*.spec
+
+# ---- Machine Learning Artifacts ----
+models/
+checkpoints/
+*.h5
+*.pkl
+*.joblib
+
+# ---- Environment & Secrets ----
+.env
+.env.*
+*.key
+*.pem
+credentials.json
+token.json
+
+# ---- Test & Coverage ----
+.coverage
+htmlcov/
+.pytest_cache/
