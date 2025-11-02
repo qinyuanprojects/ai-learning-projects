@@ -1,6 +1,7 @@
 # app.py
 from fastapi import FastAPI
 from pydantic import BaseModel
+import os
 import joblib
 
 class PredictRequest(BaseModel):
@@ -9,6 +10,8 @@ class PredictRequest(BaseModel):
 app = FastAPI(title="Toy Text Classifier (FastAPI)")
 
 # Load model at startup
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+model_path = os.path.join(BASE_DIR, "model.joblib")
 model_art = joblib.load("model.joblib")
 model = model_art["model"]
 target_names = model_art["target_names"]

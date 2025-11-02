@@ -14,8 +14,8 @@ License:
 
 
 ## Run locally (Docker)
-docker build -t fastapi-ml:latest .
-docker run -p 8000:8000 fastapi-ml:latest
+- docker build -t fastapi-ml:latest .
+- docker run -p 8000:8000 fastapi-ml:latest
 
 # Test endpoint
 - $headers = @{ "Content-Type" = "application/json" }
