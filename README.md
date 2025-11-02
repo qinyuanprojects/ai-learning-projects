@@ -17,7 +17,7 @@ License:
 - docker build -t fastapi-ml:latest .
 - docker run -p 8000:8000 fastapi-ml:latest
 
-# Test endpoint
+## Test endpoint
 - $headers = @{ "Content-Type" = "application/json" }
 - $body = '{ "text": "I need advice on car maintenance and engine noise" }'
 - Invoke-WebRequest -Uri "http://127.0.0.1:8000/predict" -Method POST -Headers $headers -Body $body
