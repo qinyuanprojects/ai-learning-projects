@@ -1,8 +1,10 @@
 # app.py
 from fastapi import FastAPI
 from pydantic import BaseModel
+from sklearn.linear_model import LogisticRegression
 import os
 import joblib
+import numpy as np
 
 class PredictRequest(BaseModel):
     text: str
@@ -17,13 +19,11 @@ if os.path.exists(model_path):
     model_art = joblib.load(model_path)
 else:
     print("⚠️ model.joblib not found due to wrong filepath or model not being pushed to Github— using dummy model for tests.")
-    from sklearn.linear_model import LogisticRegression
-    import numpy as np
     dummy_model = LogisticRegression()
     dummy_model.classes_ = np.array([0, 1])
     dummy_model.coef_ = np.zeros((1, 1))
     dummy_model.intercept_ = np.zeros(1)
-    model_art = dummy_model
+    model_art = {"model": dummy_model, "target_names": ["class_a", "class_b"]}
 
 model = model_art["model"]
 target_names = model_art["target_names"]
