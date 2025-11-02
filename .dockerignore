@@ -1,0 +1,39 @@
+# Byte-compiled / cache files
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environment
+.venv/
+env/
+venv/
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Model and data artifacts
+*.joblib
+*.pkl
+
+# Logs and temporary files
+*.log
+*.tmp
+
+*.pyc
+*.swp
+*.DS_Store
+.git
+.env
+venv/
+.venv/
+__MACOSX/
+.venv
+.ipynb_checkpoints
+*.db
+*.sqlite3
+.DS_Store
+.git
