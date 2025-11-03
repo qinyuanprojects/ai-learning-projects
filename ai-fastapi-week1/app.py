@@ -34,12 +34,16 @@ def health():
 
 @app.post("/predict")
 def predict(req: PredictRequest):
-    text = [req.text]
-    prob = model.predict_proba(text)[0]
-    pred_idx = int(prob.argmax())
+    text = req.text
+
+    # ✅ Wrap input in a list to form a 2D array (1 sample)
+    preds = model.predict([text])
+    prob = model.predict_proba([text])[0]
+
     return {
-        "prediction": target_names[pred_idx],
-        "prediction_index": pred_idx,
-        "probabilities": {target_names[i]: float(prob[i]) for i in range(len(prob))}
+        "text": text,
+        "prediction": preds[0],
+        "probability": prob.tolist(),
+        "labels": target_names
     }
 
