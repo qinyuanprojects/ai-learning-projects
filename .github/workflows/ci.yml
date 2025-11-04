@@ -37,7 +37,7 @@ jobs:
       - name: Run FastAPI endpoint test
         run: |
           # Start FastAPI app in background
-          nohup uvicorn app:app --host 0.0.0.0 --port 8000 &
+          nohup uvicorn ai-fastapi-week1.app:app --host 0.0.0.0 --port 8000 &
           sleep 5  # give it time to start
           python - << 'EOF'
           import httpx
