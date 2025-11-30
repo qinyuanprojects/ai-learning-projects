@@ -9,6 +9,8 @@ __pycache__/
 # ---- Virtual Environments ----
 .venv/
 venv/
+.mlenv/
+mlenv/
 env/
 ENV/
 
@@ -42,7 +44,6 @@ models/
 checkpoints/
 *.h5
 *.pkl
-*.joblib
 
 # ---- Environment & Secrets ----
 .env
@@ -56,6 +57,3 @@ token.json
 .coverage
 htmlcov/
 .pytest_cache/
-
-# ---- Docker ----
-docker-compose.override.yml

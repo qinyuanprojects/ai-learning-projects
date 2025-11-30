@@ -9,6 +9,8 @@ __pycache__/
 # ---- Virtual Environments ----
 .venv/
 venv/
+.mlenv/
+mlenv/
 env/
 ENV/
 
@@ -42,7 +44,6 @@ models/
 checkpoints/
 *.h5
 *.pkl
-*.joblib
 
 # ---- Environment & Secrets ----
 .env

@@ -1,50 +1,67 @@
-# app.py
-from fastapi import FastAPI
+# app.py (clean + correct)
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from sklearn.linear_model import LogisticRegression
-import os
 import joblib
-import numpy as np
+import os
+import traceback
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger("app")
 
 class PredictRequest(BaseModel):
     text: str
 
-app = FastAPI(title="Toy Text Classifier (FastAPI)")
+app = FastAPI(title="Text Classifier API")
 
-# Load model
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 model_path = os.path.join(BASE_DIR, "model.joblib")
 
-if os.path.exists(model_path):
+# Load model on startup
+try:
+    logger.info(f"Attempting to load model from: {model_path}")
     model_art = joblib.load(model_path)
-else:
-    print("⚠️ model.joblib not found — using dummy model for tests.")
-    dummy_model = LogisticRegression()
-    dummy_model.classes_ = np.array(["class_a", "class_b"])
-    dummy_model.coef_ = np.zeros((1, 1))
-    dummy_model.intercept_ = np.zeros(1)
-    dummy_model.predict = lambda X: ["class_a"]
-    dummy_model.predict_proba = lambda X: np.array([[0.9, 0.1]])
-    model_art = {"model": dummy_model, "target_names": ["class_a", "class_b"]}
-
-model = model_art["model"]
-target_names = model_art["target_names"]
+    model = model_art["model"]
+    target_names = model_art["target_names"]
+    logger.info("Model loaded successfully!")
+except Exception:
+    logger.error("Model failed to load:\n" + traceback.format_exc())
+    model = None
+    target_names = None
 
 @app.get("/")
 def health():
-    return {"status": "ok", "model_loaded": bool(model)}
+    return {
+        "status": "ok",
+        "model_loaded": model is not None
+    }
 
 @app.post("/predict")
 def predict(req: PredictRequest):
-    text = [req.text]  # input for vectorizer
-    try:
-        prediction = model.predict(text)
-        probabilities = model.predict_proba(text).tolist()
-    except Exception:
-        prediction = ["class_a"]
-        probabilities = [[1.0, 0.0]]
+    if model is None:
+        raise HTTPException(status_code=500, detail="Model not loaded.")
 
-    return {
-        "prediction": str(prediction[0]),
-        "probabilities": probabilities
-    }
+    try:
+        text = [req.text]
+        pred = model.predict(text)[0]
+        proba = model.predict_proba(text)[0]
+
+        # If pred is int, map using class names
+        if isinstance(pred, (int, float)):
+            pred_name = target_names[pred]
+        else:
+            pred_name = str(pred)
+
+        proba_map = {
+            target_names[i]: float(proba[i])
+            for i in range(len(target_names))
+        }
+
+        return {
+            "prediction": pred_name,
+            "probabilities": proba_map
+        }
+
+    except Exception:
+        logger.error("Exception during prediction:\n" + traceback.format_exc())
+        raise HTTPException(status_code=500, detail="Prediction failed; check logs.")
