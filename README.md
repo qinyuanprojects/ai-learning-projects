@@ -1,125 +1,107 @@
-Week 1–3 — FastAPI + Machine Learning Text Classifier 🚗🔌
+# Week 1–3: FastAPI + Machine Learning + Cloud Deployment 🚀
 
-Toy NLP model: rec.autos vs sci.electronics
+A practical mini-project applying **text classification with scikit-learn**, wrapped in **FastAPI**, and deployed to the **cloud via Render**.
 
-🎯 Project Goal
+---
 
-Build a complete ML deployment workflow:
+## 📌 What’s Inside
 
-Train a text classification model using scikit-learn
+| Week | Focus Area | Key Skills Learned |
+|------|------------|------------------|
+| Week 1 | FastAPI Basics | API routing, request/response models |
+| Week 2 | ML Integration | scikit-learn training + model serving |
+| Week 3 | Cloud Deployment | Render deployment, runtime config, debugging |
 
-Serve predictions using FastAPI
+Classifier predicts between:
+- `rec.autos` 🚗 (car discussions)
+- `sci.electronics` 🔌 (electronics discussions)
 
-Deploy to the cloud (Render)
+---
 
-This demonstrates both backend API skills & ML engineering skills.
+## 🧠 Machine Learning Pipeline (scikit-learn)
 
-🧠 Machine Learning Overview
-Component	Tool	Purpose
-Dataset	scikit-learn 20 Newsgroups	Real-world text categories
-Feature extraction	TF-IDF Vectorizer	Convert raw text → numeric vectors
-Classifier	Logistic Regression	Predict topic + probabilities
-Persistence	joblib	Save + load model for deployment
-Workflow
+- Dataset: **20 Newsgroups** (subset: 2 categories)
+- Preprocessing: **TfidfVectorizer**
+- Model: **LogisticRegression**
+- Metrics: **Accuracy, Classification Report**
+- Model saved using **joblib** → `model.joblib`
 
-Load filtered dataset (autos vs electronics)
+Run model training locally:
 
-Split into train/test
-
-Train TF-IDF + Logistic Regression pipeline
-
-Evaluate accuracy + classification report
-
-Save model (model.joblib) for API
-
-📌 Predictions include:
-
-Predicted category name
-
-Confidence probability for each class
-
-Example:
-
-{
-  "prediction": "rec.autos",
-  "probabilities": {
-    "rec.autos": 0.84,
-    "sci.electronics": 0.16
-  }
-}
-
-🖥 Local Development
-1️⃣ Create & activate environment
-
-Mac/Linux:
-
-python3 -m venv .venv && source .venv/bin/activate
-
-
-Windows (PowerShell):
-
-python -m venv .venv
-.venv\Scripts\Activate
-
-2️⃣ Install dependencies
-pip install -r requirements.txt
-
-3️⃣ Train the model
+```sh
 python train_model.py
+```
 
+This generates:
+- model.joblib (trained model)
+- vectorizer.joblib (TF-IDF vocabulary)
 
-→ outputs accuracy & saves model.joblib
+---
 
-4️⃣ Start the API server
+## 🖥️ Local Development Setup
+
+```sh
+python -m venv .venv
+# Windows
+.venv\Scripts\activate
+# macOS/Linux
+source .venv/bin/activate
+
+pip install -r requirements.txt
 uvicorn app:app --reload --port 8000
+```
 
-5️⃣ Try it in browser
+Visit interactive API docs:
+👉 http://127.0.0.1:8000/docs
 
-➡ http://127.0.0.1:8000/docs
+---
 
-(Interactive Swagger UI)
+## 🔌 API Endpoints
 
-☁️ Deployment (Render)
+- **GET** `/`  
+  Health check → returns the status of the API.
 
-A production version is deployed to Render using:
-
-FastAPI app
-
-Gunicorn + Uvicorn workers
-
-runtime.txt to enforce correct Python version
-
-The deployed API matches local behavior, though small probability differences can occur due to:
-
-Different OS-level dependencies (SciPy/BLAS)
-
-Updated model joblib in deployment environment
-
-🔍 API Endpoints
-Method	Endpoint	Description
-GET	/	Health/status check
-POST	/predict	Text classification
-
-Prediction request format:
-
+- **POST** `/predict`  
+  Request JSON: 
+```json
 {
-  "text": "I need help with my engine noise"
+    "text": "Your input text here"
 }
+```
+Response JSON:
+```json
+{
+  "prediction": "predicted_class",
+  "probabilities": {
+    "rec.autos": 0.85,
+    "sci.electronics": 0.15
+    }
+}
+```
 
-🏆 What This Demonstrates
+---
 
-✔ End-to-end ML product lifecycle
-✔ Deployment-ready API engineering
-✔ Data preprocessing + model training
-✔ Reproducible environment setup
-✔ Cloud hosting + real HTTP requests
+## ☁️ Week 3 — Deploying to Render
+### Key Deployment Tasks Completed
+✔ `requirements.txt` cleanup for compatibility.  
+✔ Debugged SciPy and Pydantic dependency issues.  
+✔ Confirmed predictions match local testing.
 
-📌 Future Enhancements (Next milestones)
+Deployed service:
+🔗 https://ai-fastapi-week1.onrender.com/docs
 
-Add more categories from 20 Newsgroups
+Test with PowerShell:
+```powershell
+$headers = @{ "Content-Type" = "application/json" }
+$body = '{ "text": "I need advice on car maintenance and engine noise" }'
+Invoke-WebRequest -Uri "https://ai-fastapi-week1.onrender.com/predict" -Method POST -Headers $headers -Body $body
+```
 
-Model versioning + continuous redeploy
+---
+### 🧑‍💻 Author
 
-Add confidence thresholds + error handling UI
+Project by **Qin Yuan**  
+Learning & building through real shipped AI ✨
 
-Expand to a full NLP microservice portfolio
+---
+*Thanks for checking out this project!* 🚀
