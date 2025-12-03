@@ -1,25 +1,125 @@
-# AI Learning Projects
+Week 1–3 — FastAPI + Machine Learning Text Classifier 🚗🔌
 
-[![CI Pipeline](https://github.com/qinyuanprojects/ai-learning-projects/actions/workflows/ci.yml/badge.svg)](https://github.com/qinyuanprojects/ai-learning-projects/actions/workflows/ci.yml)
+Toy NLP model: rec.autos vs sci.electronics
 
-A collection of AI backend learning projects built with FastAPI, ML, and Docker.
+🎯 Project Goal
+
+Build a complete ML deployment workflow:
+
+Train a text classification model using scikit-learn
+
+Serve predictions using FastAPI
+
+Deploy to the cloud (Render)
+
+This demonstrates both backend API skills & ML engineering skills.
+
+🧠 Machine Learning Overview
+Component	Tool	Purpose
+Dataset	scikit-learn 20 Newsgroups	Real-world text categories
+Feature extraction	TF-IDF Vectorizer	Convert raw text → numeric vectors
+Classifier	Logistic Regression	Predict topic + probabilities
+Persistence	joblib	Save + load model for deployment
+Workflow
+
+Load filtered dataset (autos vs electronics)
+
+Split into train/test
+
+Train TF-IDF + Logistic Regression pipeline
+
+Evaluate accuracy + classification report
+
+Save model (model.joblib) for API
+
+📌 Predictions include:
+
+Predicted category name
+
+Confidence probability for each class
+
+Example:
+
+{
+  "prediction": "rec.autos",
+  "probabilities": {
+    "rec.autos": 0.84,
+    "sci.electronics": 0.16
+  }
+}
+
+🖥 Local Development
+1️⃣ Create & activate environment
+
+Mac/Linux:
+
+python3 -m venv .venv && source .venv/bin/activate
 
 
-Python version:
-![Python](https://img.shields.io/badge/python-3.11-blue.svg)
+Windows (PowerShell):
+
+python -m venv .venv
+.venv\Scripts\Activate
+
+2️⃣ Install dependencies
+pip install -r requirements.txt
+
+3️⃣ Train the model
+python train_model.py
 
 
-License:
-![License](https://img.shields.io/github/license/qinyuanprojects/ai-learning-projects)
+→ outputs accuracy & saves model.joblib
 
+4️⃣ Start the API server
+uvicorn app:app --reload --port 8000
 
-## Run locally (Docker)
-- docker build -t fastapi-ml:latest .
-- docker run -p 8000:8000 fastapi-ml:latest
+5️⃣ Try it in browser
 
-## Test endpoint
-- $headers = @{ "Content-Type" = "application/json" }
-- $body = '{ "text": "I need advice on car maintenance and engine noise" }'
-- Invoke-WebRequest -Uri "http://127.0.0.1:8000/predict" -Method POST -Headers $headers -Body $body
+➡ http://127.0.0.1:8000/docs
 
-- (Invoke-WebRequest -Uri "http://127.0.0.1:8000/predict" -Method POST -Headers $headers -Body $body).Content
+(Interactive Swagger UI)
+
+☁️ Deployment (Render)
+
+A production version is deployed to Render using:
+
+FastAPI app
+
+Gunicorn + Uvicorn workers
+
+runtime.txt to enforce correct Python version
+
+The deployed API matches local behavior, though small probability differences can occur due to:
+
+Different OS-level dependencies (SciPy/BLAS)
+
+Updated model joblib in deployment environment
+
+🔍 API Endpoints
+Method	Endpoint	Description
+GET	/	Health/status check
+POST	/predict	Text classification
+
+Prediction request format:
+
+{
+  "text": "I need help with my engine noise"
+}
+
+🏆 What This Demonstrates
+
+✔ End-to-end ML product lifecycle
+✔ Deployment-ready API engineering
+✔ Data preprocessing + model training
+✔ Reproducible environment setup
+✔ Cloud hosting + real HTTP requests
+
+📌 Future Enhancements (Next milestones)
+
+Add more categories from 20 Newsgroups
+
+Model versioning + continuous redeploy
+
+Add confidence thresholds + error handling UI
+
+Expand to a full NLP microservice portfolio
